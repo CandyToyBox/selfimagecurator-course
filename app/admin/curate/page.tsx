@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-type ImageMeta = { path: string; name: string; folder: string };
+type ImageMeta = { path: string; name: string; folder: string; url: string };
 type Results = Record<string, string>;
 
 const BODY_TYPES = ["apple", "hourglass", "inverted-triangle", "rectangle", "triangle", "skip"];
@@ -58,7 +58,9 @@ export default function CuratePage() {
     setFinalizing(true);
     const res = await fetch("/api/admin/save", { method: "PUT" });
     const data = await res.json();
-    setFinalMsg(data.copied?.join("\n") || "Nothing copied.");
+    const picks = data.picks || {};
+    const summary = Object.entries(picks).map(([bt, path]) => `${bt} → ${path}`).join("\n");
+    setFinalMsg(summary || "Nothing picked yet.");
     setFinalizing(false);
   };
 
@@ -172,7 +174,7 @@ export default function CuratePage() {
               {/* Image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`/api/admin/images?path=${encodeURIComponent(img.path)}`}
+                src={img.url}
                 alt={img.name}
                 loading="lazy"
                 style={{ width: "100%", display: "block" }}

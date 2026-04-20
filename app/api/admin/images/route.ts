@@ -1,85 +1,49 @@
 /**
- * LOCAL-ONLY admin API — reads body type images from the local filesystem.
- * Only active in development (returns 404 in production).
+ * Admin images API — lists curation images and results from Vercel Blob.
  *
- * GET  /api/admin/images           → JSON list of image metadata
- * GET  /api/admin/images?path=...  → serve raw image bytes
+ * GET  /api/admin/images           → JSON list of image metadata + current results
+ * GET  /api/admin/images?name=...  → redirect to the Blob CDN URL for that image
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { list } from "@vercel/blob";
 
-const SRC_DIRS = [
-  path.join(process.env.HOME || "", "Downloads", "Thays book images"),
-  path.join(process.env.HOME || "", "Downloads", "EOther images thays"),
-];
+const RESULTS_BLOB = "curation/results.json";
 
-const UPSCALED_DIR = path.join(
-  process.env.HOME || "",
-  "thays-brand", "graphic-system", "images", "upscaled"
-);
-
-const RESULTS_FILE = path.join(
-  process.env.HOME || "",
-  "thays-brand", "scripts", "curation_results.json"
-);
-
-function getImages() {
-  const exts = new Set([".jpg", ".jpeg", ".png"]);
-  const images: { path: string; name: string; folder: string }[] = [];
-  for (const dir of SRC_DIRS) {
-    if (!fs.existsSync(dir)) continue;
-    const folder = path.basename(dir);
-    for (const f of fs.readdirSync(dir).sort()) {
-      if (exts.has(path.extname(f).toLowerCase()) && !f.startsWith("screencapture")) {
-        images.push({ path: path.join(dir, f), name: f, folder });
-      }
-    }
-  }
-  return images;
-}
-
-function loadResults(): Record<string, string> {
+async function loadResults(): Promise<Record<string, string>> {
   try {
-    return JSON.parse(fs.readFileSync(RESULTS_FILE, "utf-8"));
+    const { blobs } = await list({ prefix: RESULTS_BLOB });
+    if (!blobs.length) return {};
+    const res = await fetch(blobs[0].url);
+    return await res.json();
   } catch {
     return {};
   }
 }
 
 export async function GET(req: NextRequest) {
-  if (process.env.NODE_ENV !== "development") {
-    return NextResponse.json({ error: "Not available in production" }, { status: 404 });
+  const name = req.nextUrl.searchParams.get("name");
+
+  if (name) {
+    const { blobs } = await list({ prefix: `curation/images/${name}` });
+    if (!blobs.length) return new NextResponse(null, { status: 404 });
+    return NextResponse.redirect(blobs[0].url);
   }
 
-  const imgPath = req.nextUrl.searchParams.get("path");
+  const [{ blobs }, results] = await Promise.all([
+    list({ prefix: "curation/images/" }),
+    loadResults(),
+  ]);
 
-  // Serve a single image — prefer upscaled version when available
-  if (imgPath) {
-    // Check for upscaled version first
-    const folder   = path.basename(path.dirname(imgPath));
-    const stem     = path.basename(imgPath, path.extname(imgPath));
-    const upscaled = path.join(UPSCALED_DIR, folder, `${stem}_4x.jpg`);
-    const servePath = fs.existsSync(upscaled) ? upscaled : imgPath;
+  const images = blobs
+    .filter((b) => !b.pathname.endsWith("/"))
+    .sort((a, b) => a.pathname.localeCompare(b.pathname))
+    .map((b) => ({
+      path: b.pathname,
+      name: b.pathname.replace("curation/images/", ""),
+      folder: "Thays Book Images",
+      url: b.url,
+    }));
 
-    if (!fs.existsSync(servePath)) {
-      return new NextResponse(null, { status: 404 });
-    }
-    const ext  = path.extname(servePath).toLowerCase();
-    const mime = ext === ".png" ? "image/png" : "image/jpeg";
-    const buf  = fs.readFileSync(servePath);
-    return new NextResponse(buf, {
-      headers: {
-        "Content-Type": mime,
-        "Cache-Control": "public, max-age=3600",
-        "X-Upscaled": fs.existsSync(upscaled) ? "true" : "false",
-      },
-    });
-  }
-
-  // Return full image list + current results
-  const images = getImages();
-  const results = loadResults();
   return NextResponse.json({ images, results, total: images.length });
 }
