@@ -43,6 +43,27 @@ export default function CuratePage() {
 
   useEffect(() => { load(); }, [load]);
 
+  const clear = async (imgPath: string) => {
+    setSaving(imgPath);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/admin/save", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imgPath }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setSaveError(`Clear failed: ${data.error || res.statusText}`);
+      } else {
+        setResults((r) => { const next = { ...r }; delete next[imgPath]; return next; });
+      }
+    } catch (e) {
+      setSaveError(`Clear failed: ${e instanceof Error ? e.message : "network error"}`);
+    }
+    setSaving(null);
+  };
+
   const classify = async (imgPath: string, bodyType: string) => {
     setSaving(imgPath);
     setSaveError(null);
@@ -179,15 +200,28 @@ export default function CuratePage() {
               position: "relative",
               transition: "opacity 0.2s",
             }}>
-              {/* Current type badge */}
+              {/* Current type badge + clear button */}
               {current && current !== "skip" && (
-                <div style={{
-                  position: "absolute", top: 6, right: 6, zIndex: 2,
-                  background: TYPE_COLORS[current], color: "#EEEFED",
-                  fontSize: 9, padding: "2px 6px", fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.1em",
-                }}>
-                  {TYPE_LABELS[current]}
+                <div style={{ position: "absolute", top: 6, right: 6, zIndex: 2, display: "flex", gap: 3, alignItems: "center" }}>
+                  <div style={{
+                    background: TYPE_COLORS[current], color: "#EEEFED",
+                    fontSize: 9, padding: "2px 6px", fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.1em",
+                  }}>
+                    {TYPE_LABELS[current]}
+                  </div>
+                  <button
+                    onClick={() => clear(img.path)}
+                    disabled={isSaving}
+                    title="Clear classification"
+                    style={{
+                      background: "rgba(0,0,0,0.55)", color: "#EEEFED",
+                      border: "none", cursor: "pointer", fontSize: 10,
+                      lineHeight: 1, padding: "3px 5px", fontWeight: 700,
+                    }}
+                  >
+                    ×
+                  </button>
                 </div>
               )}
 

@@ -1,8 +1,9 @@
 /**
  * Admin save API — persists body type classifications to Supabase.
  *
- * POST /api/admin/save  { imgPath, bodyType }  → upsert one classification
- * PUT  /api/admin/save                          → return best pick per body type
+ * POST   /api/admin/save  { imgPath, bodyType }  → upsert one classification
+ * DELETE /api/admin/save  { imgPath }             → remove classification (back to uncategorized)
+ * PUT    /api/admin/save                          → return best pick per body type
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -22,6 +23,21 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase
     .from("curation_results")
     .upsert({ image_name: imgPath, body_type: bodyType, updated_at: new Date().toISOString() });
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true });
+}
+
+export async function DELETE(req: NextRequest) {
+  const { imgPath } = await req.json();
+  if (!imgPath) {
+    return NextResponse.json({ error: "Missing imgPath" }, { status: 400 });
+  }
+
+  const { error } = await supabase
+    .from("curation_results")
+    .delete()
+    .eq("image_name", imgPath);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
