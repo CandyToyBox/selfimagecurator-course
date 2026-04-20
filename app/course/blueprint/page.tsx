@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getPersonalizedLessons, BODY_STRUCTURE_INFO, type UserProfile } from "@/lib/curriculum";
 import { Download, CalendarDays } from "lucide-react";
+import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
 
 export default function BlueprintPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -51,24 +52,44 @@ export default function BlueprintPage() {
       >
         {/* Header */}
         <div
-          className="pb-6"
+          className="pb-6 flex items-end gap-6"
           style={{ borderBottom: "1px solid var(--ink-ghost)" }}
         >
-          <p
-            className="text-xs uppercase tracking-[0.3em] mb-2"
-            style={{ color: "var(--ink-soft)" }}
-          >
-            Self-Image Curator — Personal Style Blueprint
-          </p>
-          <h2
-            className="text-2xl font-bold"
-            style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
-          >
-            {profile?.bodyStructure
-              ? BODY_STRUCTURE_INFO[profile.bodyStructure].label
-              : "Your"}{" "}
-            Body Blueprint
-          </h2>
+          {/* Body type croquis */}
+          {profile?.bodyStructure && (
+            <div
+              className="shrink-0 print:block"
+              style={{ width: 72, height: 104 }}
+            >
+              <BodyStructureIllustration type={profile.bodyStructure} selected />
+            </div>
+          )}
+
+          <div>
+            <p
+              className="text-xs uppercase tracking-[0.3em] mb-2"
+              style={{ color: "var(--ink-soft)" }}
+            >
+              Self-Image Curator — Personal Style Blueprint
+            </p>
+            <h2
+              className="text-2xl font-bold"
+              style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
+            >
+              {profile?.bodyStructure
+                ? BODY_STRUCTURE_INFO[profile.bodyStructure].label
+                : "Your"}{" "}
+              Body Blueprint
+            </h2>
+            {profile?.bodyStructure && (
+              <p
+                className="text-xs mt-1 max-w-xs"
+                style={{ color: "var(--ink-soft)" }}
+              >
+                {BODY_STRUCTURE_INFO[profile.bodyStructure].description}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Profile summary */}

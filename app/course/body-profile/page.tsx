@@ -12,6 +12,10 @@ import type {
   UserProfile,
 } from "@/lib/curriculum";
 import { BODY_STRUCTURE_INFO } from "@/lib/curriculum";
+import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
+import { VerticalLineIllustration } from "@/components/VerticalLineIllustration";
+import { ShoulderTypeIllustration } from "@/components/ShoulderTypeIllustration";
+import { HipPlacementIllustration } from "@/components/HipPlacementIllustration";
 
 type Section = "structure" | "line" | "proportions" | "shoulder" | "hip";
 
@@ -184,23 +188,59 @@ export default function BodyProfilePage() {
           onClick={() => toggle("structure")}
         />
         {openSection === "structure" && (
-          <div className="py-6 space-y-3">
-            <p className="text-sm mb-4" style={{ color: "var(--ink-soft)" }}>
+          <div className="py-6">
+            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
               Stand in front of a mirror and observe the overall shape created by your shoulders,
-              waist, and hips. Which description feels most accurate?
+              waist, and hips — based on bone structure, not body weight. Which silhouette feels
+              most accurate?
             </p>
-            {(Object.keys(BODY_STRUCTURE_INFO) as BodyStructure[]).map((key) => (
-              <OptionButton
-                key={key}
-                label={BODY_STRUCTURE_INFO[key].label}
-                description={BODY_STRUCTURE_INFO[key].description}
-                selected={profile.bodyStructure === key}
-                onClick={() => {
-                  save({ bodyStructure: key });
-                  setOpenSection("line");
-                }}
-              />
-            ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {(Object.keys(BODY_STRUCTURE_INFO) as BodyStructure[]).map((key) => {
+                const selected = profile.bodyStructure === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      save({ bodyStructure: key });
+                      setOpenSection("line");
+                    }}
+                    className="text-left transition-all focus:outline-none group"
+                    style={{
+                      background: selected ? "var(--plum)" : "var(--parchment)",
+                      border: `1.5px solid ${selected ? "var(--plum)" : "var(--ink-ghost)"}`,
+                    }}
+                  >
+                    {/* Illustration */}
+                    <div className="aspect-[3/5] w-full">
+                      <BodyStructureIllustration type={key} selected={selected} />
+                    </div>
+
+                    {/* Label */}
+                    <div className="px-3 py-3">
+                      <p
+                        className="text-xs font-bold uppercase tracking-wide leading-tight"
+                        style={{
+                          fontFamily: "Rajdhani, sans-serif",
+                          color: selected ? "var(--cream)" : "var(--ink)",
+                        }}
+                      >
+                        {BODY_STRUCTURE_INFO[key].label}
+                      </p>
+                      <p
+                        className="text-[10px] mt-1 leading-relaxed hidden sm:block"
+                        style={{
+                          color: selected
+                            ? "rgba(238,239,237,0.68)"
+                            : "var(--ink-soft)",
+                        }}
+                      >
+                        {BODY_STRUCTURE_INFO[key].description}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
@@ -214,29 +254,67 @@ export default function BodyProfilePage() {
           onClick={() => toggle("line")}
         />
         {openSection === "line" && (
-          <div className="py-6 space-y-3">
-            <p className="text-sm mb-4" style={{ color: "var(--ink-soft)" }}>
-              Your vertical line describes the overall movement of your body — how curves flow or
-              don&apos;t. Look at the full silhouette of your body from the front.
+          <div className="py-6">
+            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
+              Your vertical line describes the quality of movement in your body — whether your
+              transitions are rounded and flowing, or more geometric and straight. Look at your
+              full silhouette from the front.
             </p>
-            <OptionButton
-              label="Curvy"
-              description="Clear curves — at the bust, waist, or hips. Your body has visible rounded transitions."
-              selected={profile.verticalLine === "curvy"}
-              onClick={() => {
-                save({ verticalLine: "curvy" });
-                setOpenSection("proportions");
-              }}
-            />
-            <OptionButton
-              label="Angular"
-              description="Straighter silhouette — fewer visible curves. Your transitions are more linear."
-              selected={profile.verticalLine === "angular"}
-              onClick={() => {
-                save({ verticalLine: "angular" });
-                setOpenSection("proportions");
-              }}
-            />
+            <div className="grid grid-cols-2 gap-4 max-w-sm">
+              {(
+                [
+                  {
+                    value: "curvy" as VerticalLine,
+                    label: "Curvy",
+                    desc: "Visible rounded transitions — at the bust, waist, or hips.",
+                  },
+                  {
+                    value: "angular" as VerticalLine,
+                    label: "Angular",
+                    desc: "More geometric and linear — fewer visible curves in the silhouette.",
+                  },
+                ] as { value: VerticalLine; label: string; desc: string }[]
+              ).map(({ value, label, desc }) => {
+                const selected = profile.verticalLine === value;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => {
+                      save({ verticalLine: value });
+                      setOpenSection("proportions");
+                    }}
+                    className="text-left transition-all focus:outline-none"
+                    style={{
+                      background: selected ? "var(--plum)" : "var(--parchment)",
+                      border: `1.5px solid ${selected ? "var(--plum)" : "var(--ink-ghost)"}`,
+                    }}
+                  >
+                    <div className="aspect-[4/5] w-full">
+                      <VerticalLineIllustration type={value} selected={selected} />
+                    </div>
+                    <div className="px-3 py-3">
+                      <p
+                        className="text-xs font-bold uppercase tracking-wide"
+                        style={{
+                          fontFamily: "Rajdhani, sans-serif",
+                          color: selected ? "var(--cream)" : "var(--ink)",
+                        }}
+                      >
+                        {label}
+                      </p>
+                      <p
+                        className="text-[10px] mt-1 leading-relaxed"
+                        style={{
+                          color: selected ? "rgba(238,239,237,0.68)" : "var(--ink-soft)",
+                        }}
+                      >
+                        {desc}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
@@ -287,37 +365,71 @@ export default function BodyProfilePage() {
           onClick={() => toggle("shoulder")}
         />
         {openSection === "shoulder" && (
-          <div className="py-6 space-y-3">
-            <p className="text-sm mb-4" style={{ color: "var(--ink-soft)" }}>
-              Look at your shoulders from the front. What is the angle and placement of your shoulder line?
+          <div className="py-6">
+            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
+              Look at your shoulders from the front. What is the angle of your shoulder line from
+              where it meets your neck to the shoulder point?
             </p>
-            <OptionButton
-              label="Dropped Shoulder"
-              description="Your shoulders have a slope — they drop down from your neck at an angle."
-              selected={profile.shoulderType === "dropped"}
-              onClick={() => {
-                save({ shoulderType: "dropped" });
-                setOpenSection("hip");
-              }}
-            />
-            <OptionButton
-              label="Square Shoulder"
-              description="Your shoulders are relatively flat and sit at a horizontal angle — squarer in appearance."
-              selected={profile.shoulderType === "square"}
-              onClick={() => {
-                save({ shoulderType: "square" });
-                setOpenSection("hip");
-              }}
-            />
-            <OptionButton
-              label="Standard Shoulder"
-              description="Neither prominently dropped nor square — a moderate, balanced shoulder line."
-              selected={profile.shoulderType === "standard"}
-              onClick={() => {
-                save({ shoulderType: "standard" });
-                setOpenSection("hip");
-              }}
-            />
+            <div className="grid grid-cols-3 gap-3 max-w-sm">
+              {(
+                [
+                  {
+                    value: "dropped" as ShoulderType,
+                    label: "Dropped",
+                    desc: "Slopes downward from neck — a visible angle.",
+                  },
+                  {
+                    value: "square" as ShoulderType,
+                    label: "Square",
+                    desc: "Relatively flat and horizontal — squared appearance.",
+                  },
+                  {
+                    value: "standard" as ShoulderType,
+                    label: "Standard",
+                    desc: "Moderate angle — between dropped and square.",
+                  },
+                ] as { value: ShoulderType; label: string; desc: string }[]
+              ).map(({ value, label, desc }) => {
+                const selected = profile.shoulderType === value;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => {
+                      save({ shoulderType: value });
+                      setOpenSection("hip");
+                    }}
+                    className="text-left transition-all focus:outline-none"
+                    style={{
+                      background: selected ? "var(--plum)" : "var(--parchment)",
+                      border: `1.5px solid ${selected ? "var(--plum)" : "var(--ink-ghost)"}`,
+                    }}
+                  >
+                    <div className="aspect-square w-full">
+                      <ShoulderTypeIllustration type={value} selected={selected} />
+                    </div>
+                    <div className="px-2 py-2.5">
+                      <p
+                        className="text-[11px] font-bold uppercase tracking-wide"
+                        style={{
+                          fontFamily: "Rajdhani, sans-serif",
+                          color: selected ? "var(--cream)" : "var(--ink)",
+                        }}
+                      >
+                        {label}
+                      </p>
+                      <p
+                        className="text-[10px] mt-0.5 leading-relaxed hidden sm:block"
+                        style={{
+                          color: selected ? "rgba(238,239,237,0.68)" : "var(--ink-soft)",
+                        }}
+                      >
+                        {desc}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
@@ -331,38 +443,72 @@ export default function BodyProfilePage() {
           onClick={() => toggle("hip")}
         />
         {openSection === "hip" && (
-          <div className="py-6 space-y-3">
-            <p className="text-sm mb-4" style={{ color: "var(--ink-soft)" }}>
-              Where does your hip sit relative to your waist? Use a belt or your necklace placed at
-              the fullest part of your hip to help gauge placement.
+          <div className="py-6">
+            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
+              Place your necklace or a belt at the fullest part of your hip. How far is it from
+              your natural waist? The diagram shows the distance between waist (W) and fullest
+              hip (H).
             </p>
-            <OptionButton
-              label="Low Hip"
-              description="Your hip sits lower — there is more distance between your waist and the fullest part of your hip."
-              selected={profile.hipPlacement === "low"}
-              onClick={() => {
-                save({ hipPlacement: "low" });
-                setOpenSection("" as Section);
-              }}
-            />
-            <OptionButton
-              label="High Hip"
-              description="Your hip sits higher — the fullest part of your hip is closer to your natural waist."
-              selected={profile.hipPlacement === "high"}
-              onClick={() => {
-                save({ hipPlacement: "high" });
-                setOpenSection("" as Section);
-              }}
-            />
-            <OptionButton
-              label="Standard"
-              description="Average hip placement — not distinctly high or low."
-              selected={profile.hipPlacement === "standard"}
-              onClick={() => {
-                save({ hipPlacement: "standard" });
-                setOpenSection("" as Section);
-              }}
-            />
+            <div className="grid grid-cols-3 gap-3 max-w-sm">
+              {(
+                [
+                  {
+                    value: "high" as HipPlacement,
+                    label: "High Hip",
+                    desc: "Fullest hip closer to the natural waist.",
+                  },
+                  {
+                    value: "standard" as HipPlacement,
+                    label: "Standard",
+                    desc: "Average distance from waist to fullest hip.",
+                  },
+                  {
+                    value: "low" as HipPlacement,
+                    label: "Low Hip",
+                    desc: "More distance between waist and fullest hip.",
+                  },
+                ] as { value: HipPlacement; label: string; desc: string }[]
+              ).map(({ value, label, desc }) => {
+                const selected = profile.hipPlacement === value;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => {
+                      save({ hipPlacement: value });
+                      setOpenSection("" as Section);
+                    }}
+                    className="text-left transition-all focus:outline-none"
+                    style={{
+                      background: selected ? "var(--plum)" : "var(--parchment)",
+                      border: `1.5px solid ${selected ? "var(--plum)" : "var(--ink-ghost)"}`,
+                    }}
+                  >
+                    <div className="w-full" style={{ aspectRatio: "2/3" }}>
+                      <HipPlacementIllustration type={value} selected={selected} />
+                    </div>
+                    <div className="px-2 py-2.5">
+                      <p
+                        className="text-[11px] font-bold uppercase tracking-wide"
+                        style={{
+                          fontFamily: "Rajdhani, sans-serif",
+                          color: selected ? "var(--cream)" : "var(--ink)",
+                        }}
+                      >
+                        {label}
+                      </p>
+                      <p
+                        className="text-[10px] mt-0.5 leading-relaxed hidden sm:block"
+                        style={{
+                          color: selected ? "rgba(238,239,237,0.68)" : "var(--ink-soft)",
+                        }}
+                      >
+                        {desc}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

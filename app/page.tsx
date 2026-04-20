@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
+import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
+import type { BodyStructure } from "@/lib/curriculum";
 
 const PRICE = 197;
 
@@ -202,6 +204,63 @@ export default function LandingPage() {
       </section>
 
       <div style={{ height: "1px", background: "var(--ink-ghost)", maxWidth: "800px", margin: "0 auto" }} />
+
+      {/* Body structure visual strip */}
+      <section
+        className="py-20 px-6 md:px-12"
+        style={{ background: "var(--ink-deep)" }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <p
+            className="text-xs uppercase tracking-[0.3em] mb-3"
+            style={{ color: "rgba(238,239,237,0.4)" }}
+          >
+            Your starting point
+          </p>
+          <p
+            className="text-2xl md:text-3xl font-bold mb-2"
+            style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--cream)" }}
+          >
+            Five body structures. One precise blueprint.
+          </p>
+          <p
+            className="text-sm mb-12 max-w-lg"
+            style={{ color: "rgba(238,239,237,0.55)" }}
+          >
+            Your bone structure — not your weight or measurements — determines which garment
+            principles apply to you. Every blueprint generated in this workshop is unique.
+          </p>
+          <div className="grid grid-cols-5 gap-3">
+            {(
+              [
+                { type: "apple" as BodyStructure, label: "Apple" },
+                { type: "inverted-triangle" as BodyStructure, label: "Inv. Triangle" },
+                { type: "rectangle" as BodyStructure, label: "Rectangle" },
+                { type: "triangle" as BodyStructure, label: "Triangle" },
+                { type: "hourglass" as BodyStructure, label: "Hourglass" },
+              ]
+            ).map(({ type, label }) => (
+              <div key={type} className="flex flex-col">
+                <div className="w-full" style={{ aspectRatio: "3/5" }}>
+                  <BodyStructureIllustration type={type} selected />
+                </div>
+                <p
+                  className="text-[10px] uppercase tracking-widest text-center mt-2"
+                  style={{ color: "rgba(238,239,237,0.45)", fontFamily: "Rajdhani, sans-serif" }}
+                >
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p
+            className="text-xs mt-8"
+            style={{ color: "rgba(238,239,237,0.3)" }}
+          >
+            Plus vertical line · proportions · shoulder type · hip placement — 1,620 possible profile combinations.
+          </p>
+        </div>
+      </section>
 
       {/* What you get */}
       <section id="what-you-get" className="py-24 px-6 md:px-12 max-w-4xl mx-auto">

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getPersonalizedLessons, LESSONS, type Lesson, type UserProfile } from "@/lib/curriculum";
+import { getPersonalizedLessons, LESSONS, BODY_STRUCTURE_INFO, type Lesson, type UserProfile } from "@/lib/curriculum";
+import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
 
 const CATEGORY_LABELS: Record<string, string> = {
   "body-structure": "Body Structure",
@@ -133,15 +134,24 @@ export default function GarmentGuidePage() {
         <>
           {/* Profile summary bar */}
           <div
-            className="flex flex-wrap gap-2 mb-8 p-4"
+            className="flex gap-4 mb-8 p-4"
             style={{ background: "var(--parchment)", border: "1px solid var(--ink-ghost)" }}
           >
+            {/* Body type croquis thumbnail */}
+            {profile?.bodyStructure && (
+              <div className="shrink-0" style={{ width: 56, height: 80 }}>
+                <BodyStructureIllustration type={profile.bodyStructure} selected />
+              </div>
+            )}
+
+            {/* Profile tags */}
+            <div className="flex flex-wrap gap-2 items-start content-start pt-1">
             {profile?.bodyStructure && (
               <span
                 className="text-[10px] px-2 py-1 uppercase tracking-widest font-medium"
                 style={{ background: "var(--plum)", color: "var(--cream)" }}
               >
-                {profile.bodyStructure.replace(/-/g, " ")}
+                {BODY_STRUCTURE_INFO[profile.bodyStructure].label}
               </span>
             )}
             {profile?.verticalLine && (
@@ -177,7 +187,8 @@ export default function GarmentGuidePage() {
                 {p.replace(/-/g, " ")}
               </span>
             ))}
-          </div>
+            </div> {/* /tags */}
+          </div> {/* /profile bar */}
 
           <p className="text-sm leading-relaxed mb-12" style={{ color: "var(--ink-soft)" }}>
             The{" "}
