@@ -1,49 +1,41 @@
 /**
- * Admin images API — lists curation images and results from Vercel Blob.
+ * Admin images API — lists curation images from the static manifest
+ * and results from Supabase.
  *
- * GET  /api/admin/images           → JSON list of image metadata + current results
- * GET  /api/admin/images?name=...  → redirect to the Blob CDN URL for that image
+ * GET /api/admin/images → JSON: { images, results, total }
  */
 
-import { NextRequest, NextResponse } from "next/server";
-import { list } from "@vercel/blob";
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import fs from "fs";
+import path from "path";
 
-const RESULTS_BLOB = "curation/results.json";
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+);
 
-async function loadResults(): Promise<Record<string, string>> {
-  try {
-    const { blobs } = await list({ prefix: RESULTS_BLOB });
-    if (!blobs.length) return {};
-    const res = await fetch(blobs[0].url);
-    return await res.json();
-  } catch {
-    return {};
-  }
-}
+export async function GET() {
+  const manifestPath = path.join(process.cwd(), "public", "images", "curation", "manifest.json");
+  const filenames: string[] = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
 
-export async function GET(req: NextRequest) {
-  const name = req.nextUrl.searchParams.get("name");
+  const { data: rows } = await supabase
+    .from("curation_results")
+    .select("image_name, body_type");
 
-  if (name) {
-    const { blobs } = await list({ prefix: `curation/images/${name}` });
-    if (!blobs.length) return new NextResponse(null, { status: 404 });
-    return NextResponse.redirect(blobs[0].url);
-  }
-
-  const [{ blobs }, results] = await Promise.all([
-    list({ prefix: "curation/images/" }),
-    loadResults(),
-  ]);
-
-  const images = blobs
-    .filter((b) => !b.pathname.endsWith("/"))
-    .sort((a, b) => a.pathname.localeCompare(b.pathname))
-    .map((b) => ({
-      path: b.pathname,
-      name: b.pathname.replace("curation/images/", ""),
+  const images = filenames
+    .filter((f) => f !== "manifest.json")
+    .map((name) => ({
+      path: name,
+      name,
       folder: "Thays Book Images",
-      url: b.url,
+      url: `/images/curation/${encodeURIComponent(name)}`,
     }));
+
+  const results: Record<string, string> = {};
+  for (const row of rows || []) {
+    results[row.image_name] = row.body_type;
+  }
 
   return NextResponse.json({ images, results, total: images.length });
 }
