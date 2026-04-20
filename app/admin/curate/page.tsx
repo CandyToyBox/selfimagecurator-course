@@ -31,6 +31,7 @@ export default function CuratePage() {
   const [filter, setFilter]   = useState<string>("all");
   const [finalizing, setFinalizing] = useState(false);
   const [finalMsg, setFinalMsg]     = useState("");
+  const [saveError, setSaveError]   = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/admin/images");
@@ -44,12 +45,22 @@ export default function CuratePage() {
 
   const classify = async (imgPath: string, bodyType: string) => {
     setSaving(imgPath);
-    await fetch("/api/admin/save", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imgPath, bodyType }),
-    });
-    setResults((r) => ({ ...r, [imgPath]: bodyType }));
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/admin/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imgPath, bodyType }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setSaveError(`Save failed: ${data.error || res.statusText}`);
+      } else {
+        setResults((r) => ({ ...r, [imgPath]: bodyType }));
+      }
+    } catch (e) {
+      setSaveError(`Save failed: ${e instanceof Error ? e.message : "network error"}`);
+    }
     setSaving(null);
   };
 
@@ -129,6 +140,15 @@ export default function CuratePage() {
           {finalizing ? "Copying..." : "Copy to Course"}
         </button>
       </div>
+
+      {saveError && (
+        <div style={{ background: "#8B1a1a", color: "#EEEFED", padding: "10px 20px", fontSize: 12 }}>
+          {saveError}
+          <button onClick={() => setSaveError(null)} style={{ marginLeft: 16, color: "#EEEFED", background: "none", border: "none", cursor: "pointer", fontFamily: "Rajdhani", fontWeight: 700 }}>
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {finalMsg && (
         <div style={{ background: "#342C36", color: "#EEEFED", padding: "10px 20px", fontSize: 12, whiteSpace: "pre-line" }}>
