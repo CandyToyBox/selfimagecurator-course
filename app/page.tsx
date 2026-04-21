@@ -104,17 +104,26 @@ export default function LandingPage() {
         >
           Self-Image Curator
         </span>
-        <Link
-          href="/checkout"
-          className="text-xs font-semibold uppercase tracking-widest px-5 py-2.5 transition-opacity hover:opacity-70"
-          style={{
-            background: "var(--plum)",
-            color: "var(--cream)",
-            letterSpacing: "0.15em",
-          }}
-        >
-          Enroll — ${PRICE}
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/course/welcome"
+            className="text-xs font-medium uppercase tracking-widest transition-opacity hover:opacity-60 hidden sm:block"
+            style={{ color: "var(--ink-soft)", letterSpacing: "0.15em" }}
+          >
+            Preview Course
+          </Link>
+          <Link
+            href="/checkout"
+            className="text-xs font-semibold uppercase tracking-widest px-5 py-2.5 transition-opacity hover:opacity-70"
+            style={{
+              background: "var(--plum)",
+              color: "var(--cream)",
+              letterSpacing: "0.15em",
+            }}
+          >
+            Enroll — ${PRICE}
+          </Link>
+        </div>
       </nav>
 
       {/* Hero */}
