@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getPersonalizedLessons, BODY_STRUCTURE_INFO, type UserProfile } from "@/lib/curriculum";
 import { Download, CalendarDays } from "lucide-react";
 import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
+import { BookingEmbed } from "@/components/BookingEmbed";
 
 export default function BlueprintPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -216,35 +217,39 @@ export default function BlueprintPage() {
         </button>
       </div>
 
-      {/* CTA: Book a consultation */}
+      {/* CTA: Book a consultation — intro copy */}
       <div
         className="p-8"
         style={{ background: "var(--ink-deep)", color: "var(--cream)" }}
       >
-        <CalendarDays size={24} className="mb-4 opacity-60" />
+        <CalendarDays size={24} className="mb-4 opacity-75" />
         <h2
           className="text-2xl font-bold mb-3"
           style={{ fontFamily: "Rajdhani, sans-serif" }}
         >
           Ready to go deeper?
         </h2>
-        <p className="text-sm leading-relaxed mb-6 opacity-75 max-w-lg">
+        <p className="text-sm leading-relaxed mb-2 opacity-90 max-w-lg">
           A one-on-one consultation with Thays goes beyond what any self-guided course can offer.
           She&apos;ll review your specific wardrobe, your lifestyle, and your blueprint together
           — giving you direct, personalized guidance.
         </p>
-        <a
-          href="https://selfimagecurator.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 px-6 py-3 text-sm font-semibold uppercase tracking-widest transition-opacity hover:opacity-80"
-          style={{ background: "var(--cream)", color: "var(--plum)" }}
-        >
-          Book a Consultation
-        </a>
-        <p className="text-xs mt-4 opacity-75">
-          Workshop graduates receive priority scheduling.
+        <p className="text-xs opacity-90">
+          Workshop graduates receive priority scheduling. Pick a time below.
         </p>
+      </div>
+
+      {/* Inline scheduler — clients book without leaving the course */}
+      <div style={{ border: "1px solid var(--ink-ghost)", borderTop: "none" }}>
+        <div className="px-8 pt-6 pb-2">
+          <p
+            className="text-xs uppercase tracking-[0.3em]"
+            style={{ color: "var(--ink-soft)" }}
+          >
+            Book Your Blueprint Analysis
+          </p>
+        </div>
+        <BookingEmbed />
       </div>
     </div>
   );
