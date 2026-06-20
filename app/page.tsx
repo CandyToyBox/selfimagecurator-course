@@ -20,12 +20,12 @@ const STATS = [
 
 // Heritage houses Thays sources, styles, and tailors for private clients.
 const HERITAGE_BRANDS = [
-  "Brunello Cucinelli",
-  "Loro Piana",
-  "Chanel",
-  "Hermès",
-  "Alexander McQueen",
-  "Ralph Lauren",
+  { name: "Brunello Cucinelli", logo: "/images/brands/brunello-cucinelli.svg" },
+  { name: "Loro Piana", logo: "/images/brands/loro-piana.svg" },
+  { name: "Chanel", logo: "/images/brands/chanel.svg" },
+  { name: "Hermès", logo: "/images/brands/hermes.svg" },
+  { name: "Alexander McQueen", logo: "/images/brands/alexander-mcqueen.svg" },
+  { name: "Ralph Lauren", logo: "/images/brands/ralph-lauren.svg" },
 ];
 
 const TESTIMONIALS = [
@@ -490,15 +490,22 @@ export default function LandingPage() {
           >
             Heritage houses she sources &amp; styles
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5 mb-12">
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8 mb-12">
             {HERITAGE_BRANDS.map((brand) => (
-              <span
-                key={brand}
-                className="text-base md:text-lg tracking-wide"
-                style={{ fontFamily: "Newsreader, Georgia, serif", color: "var(--cream)" }}
+              <div
+                key={brand.name}
+                className="flex items-center justify-center"
+                style={{ height: 52, width: 132 }}
+                title={brand.name}
               >
-                {brand}
-              </span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="max-h-full max-w-full object-contain transition-opacity hover:opacity-100"
+                  style={{ filter: "brightness(0) invert(1)", opacity: 0.82 }}
+                />
+              </div>
             ))}
           </div>
           <div
