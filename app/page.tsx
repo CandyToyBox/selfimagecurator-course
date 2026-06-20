@@ -490,20 +490,26 @@ export default function LandingPage() {
           >
             Heritage houses she sources &amp; styles
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-12 items-center justify-items-center max-w-3xl mx-auto mb-12">
             {HERITAGE_BRANDS.map((brand) => (
               <div
                 key={brand.name}
-                className="flex items-center justify-center"
-                style={{ height: 52, width: 132 }}
+                className="flex items-center justify-center w-full"
+                style={{ height: 80 }}
                 title={brand.name}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="max-h-full max-w-full object-contain transition-opacity hover:opacity-100"
-                  style={{ filter: "brightness(0) invert(1)", opacity: 0.82 }}
+                  className="object-contain transition-opacity hover:opacity-100"
+                  style={{
+                    maxHeight: 80,
+                    maxWidth: "100%",
+                    width: "auto",
+                    filter: "brightness(0) invert(1)",
+                    opacity: 0.85,
+                  }}
                 />
               </div>
             ))}
