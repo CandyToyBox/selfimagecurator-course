@@ -150,8 +150,8 @@ export default function CheckoutPage() {
           </button>
 
           <div className="flex items-center justify-center gap-2 pt-2">
-            <Lock size={10} style={{ color: "var(--ink-ghost)" }} />
-            <p className="text-xs" style={{ color: "var(--ink-ghost)" }}>
+            <Lock size={10} style={{ color: "var(--ink-muted)" }} />
+            <p className="text-xs" style={{ color: "var(--ink-muted)" }}>
               Secured by Stripe. One-time charge of ${PRICE}.
             </p>
           </div>

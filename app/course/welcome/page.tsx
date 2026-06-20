@@ -104,7 +104,7 @@ export default function WelcomePage() {
           >
             <span
               className="text-xs font-bold shrink-0 mt-0.5"
-              style={{ color: "var(--ink-ghost)", fontFamily: "Rajdhani, sans-serif", minWidth: "1.5rem" }}
+              style={{ color: "var(--ink-muted)", fontFamily: "Rajdhani, sans-serif", minWidth: "1.5rem" }}
             >
               {step.number}
             </span>

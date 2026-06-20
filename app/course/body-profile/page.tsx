@@ -13,6 +13,7 @@ import type {
 } from "@/lib/curriculum";
 import { BODY_STRUCTURE_INFO } from "@/lib/curriculum";
 import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
+import { BodyTypeGallery } from "@/components/BodyTypeGallery";
 import { VerticalLineIllustration } from "@/components/VerticalLineIllustration";
 import { ShoulderTypeIllustration } from "@/components/ShoulderTypeIllustration";
 import { HipPlacementIllustration } from "@/components/HipPlacementIllustration";
@@ -175,9 +176,123 @@ export default function BodyProfilePage() {
         Your body profile is the foundation of your personalized garment guide. Take your time with
         each section — there are no wrong answers, only honest observations.
       </p>
-      <p className="text-base leading-relaxed mb-16" style={{ color: "var(--ink-soft)" }}>
+      <p className="text-base leading-relaxed mb-12" style={{ color: "var(--ink-soft)" }}>
         You may want a long necklace or string to help identify your balance points and proportions.
       </p>
+
+      {/* Self Characteristics intro banner */}
+      <div
+        className="flex items-center justify-center py-8 mb-12"
+        style={{ background: "var(--ink-deep)" }}
+      >
+        <div className="text-center px-8">
+          <p
+            className="text-xs uppercase tracking-[0.45em] mb-3"
+            style={{ color: "rgba(238,239,237,0.45)", fontFamily: "Rajdhani, sans-serif" }}
+          >
+            Step 2
+          </p>
+          <h2
+            className="text-3xl md:text-4xl font-bold"
+            style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--cream)" }}
+          >
+            Self Characteristics
+          </h2>
+          <p
+            className="text-sm mt-3 max-w-sm mx-auto leading-relaxed"
+            style={{ color: "rgba(238,239,237,0.6)" }}
+          >
+            Five profile dimensions that define your personal garment blueprint.
+          </p>
+        </div>
+      </div>
+
+      {/* Body Scale intro */}
+      <div className="mb-12">
+        <div className="grid md:grid-cols-2 gap-8 items-start mb-8">
+          <div>
+            <p
+              className="text-xs uppercase tracking-[0.3em] mb-3"
+              style={{ color: "var(--ink-muted)" }}
+            >
+              Before you begin
+            </p>
+            <h3
+              className="text-2xl font-bold mb-4"
+              style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
+            >
+              Body Scale
+            </h3>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--ink-soft)" }}>
+              Your body scale — whether you are plus, average, or petite — determines the weight
+              of fabrics, the structure of garments, and the scale of prints and accessories that
+              work best for you.
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
+              There is no hierarchy here — each scale has its own set of principles that create
+              harmony and intention in how garments interact with your frame.
+            </p>
+          </div>
+
+          {/* Scale silhouettes */}
+          <div className="flex items-end justify-center gap-4">
+            {[
+              { label: "Plus", widthClass: "w-16", heights: { body: "h-40", legs: "h-20" } },
+              { label: "Average", widthClass: "w-12", heights: { body: "h-36", legs: "h-24" } },
+              { label: "Petite", widthClass: "w-10", heights: { body: "h-28", legs: "h-20" } },
+            ].map(({ label, widthClass }) => (
+              <div key={label} className="flex flex-col items-center gap-2">
+                <div
+                  className={`${widthClass} rounded-full`}
+                  style={{
+                    background: "var(--ink)",
+                    aspectRatio: label === "Plus" ? "0.55/1" : label === "Average" ? "0.45/1" : "0.45/1",
+                    height: label === "Plus" ? "140px" : label === "Average" ? "130px" : "105px",
+                    opacity: 0.85,
+                    borderRadius: label === "Plus" ? "48% 48% 38% 38% / 30% 30% 50% 50%" : "45% 45% 38% 38% / 28% 28% 48% 48%",
+                  }}
+                />
+                <p
+                  className="text-[10px] uppercase tracking-widest"
+                  style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink-muted)" }}
+                >
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Vertical body line intro */}
+        <div
+          className="p-6 mb-2"
+          style={{ background: "var(--parchment)", border: "1px solid var(--ink-ghost)" }}
+        >
+          <h4
+            className="text-base font-bold mb-3"
+            style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
+          >
+            What you are profiling
+          </h4>
+          <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
+            {[
+              { item: "Body Structure", desc: "The shape created by your shoulder, waist, and hip lines." },
+              { item: "Vertical Line", desc: "Whether your silhouette reads as curvy or angular." },
+              { item: "Proportions", desc: "Neck, torso, and leg length relative to each other." },
+              { item: "Shoulder Type", desc: "Dropped, standard, or square — affects collar and sleeve choices." },
+              { item: "Hip Placement", desc: "How high or low your fullest hip sits from your natural waist." },
+            ].map(({ item, desc }) => (
+              <div key={item} className="flex items-start gap-3">
+                <div className="w-1 h-1 rounded-full mt-2 shrink-0" style={{ background: "var(--plum)" }} />
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: "var(--ink)" }}>{item}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: "var(--ink-soft)" }}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Section 1: Body Structure */}
       <div className="mb-2">
@@ -189,11 +304,70 @@ export default function BodyProfilePage() {
         />
         {openSection === "structure" && (
           <div className="py-6">
-            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
+            <p className="text-sm mb-4" style={{ color: "var(--ink-soft)" }}>
               Stand in front of a mirror and observe the overall shape created by your shoulders,
               waist, and hips — based on bone structure, not body weight. Which silhouette feels
               most accurate?
             </p>
+            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
+              There are five body structures. The key is to look at where your widest horizontal
+              line falls — shoulder, waist, or hip — and whether your outline is straight or curved.
+            </p>
+
+            {/* 5 structure definitions */}
+            <div className="grid gap-3 mb-8">
+              {[
+                {
+                  key: "inverted-triangle",
+                  name: "Inverted Triangle",
+                  def: "Shoulders are wider than the waist and hip lines.",
+                  color: "#5B8DD9",
+                },
+                {
+                  key: "triangle",
+                  name: "Triangle",
+                  def: "Broadest line is the hip — usually placed at or below the hip line.",
+                  color: "#D97B6C",
+                },
+                {
+                  key: "rectangle",
+                  name: "Rectangle",
+                  def: "Shoulder and hip lines are close in width with a less defined waist.",
+                  color: "#6B9E7A",
+                },
+                {
+                  key: "hourglass",
+                  name: "Hourglass",
+                  def: "Equal shoulder and hip width with a clearly narrower waist.",
+                  color: "#A67DB8",
+                },
+                {
+                  key: "apple",
+                  name: "Round",
+                  def: "Waist line is wider than shoulder and hip — fullness through the center.",
+                  color: "#C9A84C",
+                },
+              ].map(({ key, name, def, color }) => (
+                <div
+                  key={key}
+                  className="flex items-start gap-4 px-4 py-3"
+                  style={{ border: "1px solid var(--ink-ghost)" }}
+                >
+                  <div
+                    className="w-2 shrink-0 self-stretch"
+                    style={{ background: color, borderRadius: "2px", minHeight: "32px" }}
+                  />
+                  <div>
+                    <p className="text-sm font-bold" style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}>
+                      {name}
+                    </p>
+                    <p className="text-xs leading-relaxed mt-0.5" style={{ color: "var(--ink-soft)" }}>
+                      {def}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {(Object.keys(BODY_STRUCTURE_INFO) as BodyStructure[]).map((key) => {
                 const selected = profile.bodyStructure === key;
@@ -236,6 +410,7 @@ export default function BodyProfilePage() {
                       >
                         {BODY_STRUCTURE_INFO[key].description}
                       </p>
+                      <BodyTypeGallery type={key} selected={selected} />
                     </div>
                   </button>
                 );
@@ -366,10 +541,63 @@ export default function BodyProfilePage() {
         />
         {openSection === "shoulder" && (
           <div className="py-6">
-            <p className="text-sm mb-6" style={{ color: "var(--ink-soft)" }}>
+            <p className="text-sm mb-3" style={{ color: "var(--ink-soft)" }}>
               Look at your shoulders from the front. What is the angle of your shoulder line from
               where it meets your neck to the shoulder point?
             </p>
+            <p className="text-sm mb-4" style={{ color: "var(--ink-soft)" }}>
+              Understanding your shoulder placement is essential for determining collar styles,
+              sleeve types, haircut balance, and accessories — and for creating harmony between
+              your upper and lower body. There are three types.
+            </p>
+
+            {/* Shoulder type visual reference */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[
+                {
+                  label: "Dropped",
+                  desc: "Horizontal line slopes noticeably downward from neck to shoulder point.",
+                  angle: 18,
+                },
+                {
+                  label: "Standard",
+                  desc: "Horizontal line is slightly dropped — a subtle angle.",
+                  angle: 8,
+                },
+                {
+                  label: "Square",
+                  desc: "Shoulder line is nearly flat — minimal slope from neck to point.",
+                  angle: 0,
+                },
+              ].map(({ label, desc, angle }) => (
+                <div
+                  key={label}
+                  className="p-3"
+                  style={{ background: "var(--parchment)", border: "1px solid var(--ink-ghost)" }}
+                >
+                  {/* SVG shoulder line indicator */}
+                  <svg viewBox="0 0 80 40" className="w-full mb-2" style={{ height: "36px" }}>
+                    <line
+                      x1="10"
+                      y1={20 - angle}
+                      x2="70"
+                      y2={20 + angle}
+                      stroke="var(--ink)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="10" cy={20 - angle} r="3" fill="var(--ink)" />
+                    <circle cx="70" cy={20 + angle} r="3" fill="var(--ink)" />
+                  </svg>
+                  <p className="text-xs font-bold uppercase tracking-wide mb-1" style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}>
+                    {label}
+                  </p>
+                  <p className="text-[10px] leading-snug" style={{ color: "var(--ink-soft)" }}>
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
             <div className="grid grid-cols-3 gap-3 max-w-sm">
               {(
                 [
@@ -534,7 +762,7 @@ export default function BodyProfilePage() {
               { label: "Hip Placement", value: profile.hipPlacement },
             ].map((item) => (
               <div key={item.label}>
-                <p className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--ink-ghost)" }}>
+                <p className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--ink-muted)" }}>
                   {item.label}
                 </p>
                 <p className="text-sm font-medium capitalize" style={{ color: "var(--ink)" }}>
@@ -560,7 +788,7 @@ export default function BodyProfilePage() {
           <ArrowRight size={16} />
         </Link>
         {!isComplete && (
-          <p className="text-xs" style={{ color: "var(--ink-ghost)" }}>
+          <p className="text-xs" style={{ color: "var(--ink-muted)" }}>
             Complete all sections to continue.
           </p>
         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
@@ -98,12 +99,13 @@ export default function LandingPage() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-16"
         style={{ background: "var(--cream)", borderBottom: "1px solid var(--ink-ghost)" }}
       >
-        <span
-          className="text-xs font-bold uppercase tracking-[0.25em]"
-          style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
-        >
-          Self-Image Curator
-        </span>
+        <Image
+          src="/Self-Image Curator - Thays Logo.png"
+          alt="Self-Image Curator"
+          width={120}
+          height={40}
+          style={{ objectFit: "contain", height: "32px", width: "auto" }}
+        />
         <div className="flex items-center gap-4">
           <Link
             href="/course/welcome"
@@ -169,7 +171,7 @@ export default function LandingPage() {
             See what&apos;s inside
           </a>
         </div>
-        <p className="text-xs mt-6 opacity-40" style={{ color: "var(--cream)" }}>
+        <p className="text-xs mt-6 opacity-75" style={{ color: "var(--cream)" }}>
           One-time payment. Immediate access. No subscription.
         </p>
       </section>
@@ -290,7 +292,7 @@ export default function LandingPage() {
             >
               <span
                 className="text-xs font-bold shrink-0 mt-1"
-                style={{ color: "var(--ink-ghost)", fontFamily: "Rajdhani, sans-serif", minWidth: "2rem" }}
+                style={{ color: "var(--ink-muted)", fontFamily: "Rajdhani, sans-serif", minWidth: "2rem" }}
               >
                 {item.number}
               </span>
@@ -366,13 +368,14 @@ export default function LandingPage() {
               to do the work.
             </p>
           </div>
-          <div
-            className="aspect-[3/4] flex items-center justify-center"
-            style={{ background: "var(--ink-ghost)" }}
-          >
-            <span className="text-xs uppercase tracking-widest" style={{ color: "var(--ink-soft)" }}>
-              Photo
-            </span>
+          <div className="aspect-[3/4] overflow-hidden" style={{ background: "var(--ink-ghost)" }}>
+            <Image
+              src="/Thays B&W Coat Pic.png"
+              alt="Thays Vick"
+              width={600}
+              height={800}
+              style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            />
           </div>
         </div>
       </section>
@@ -403,7 +406,7 @@ export default function LandingPage() {
           Begin Your Blueprint
           <ArrowRight size={16} />
         </Link>
-        <p className="text-xs mt-8 opacity-40">
+        <p className="text-xs mt-8 opacity-75">
           Questions?{" "}
           <a
             href="mailto:hello@selfimagecurator.com"
@@ -430,13 +433,14 @@ export default function LandingPage() {
         className="py-10 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4"
         style={{ borderTop: "1px solid var(--ink-ghost)" }}
       >
-        <span
-          className="text-xs uppercase tracking-[0.25em]"
-          style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink-soft)" }}
-        >
-          Self-Image Curator
-        </span>
-        <p className="text-xs" style={{ color: "var(--ink-ghost)" }}>
+        <Image
+          src="/Self-Image Curator - Thays Logo.png"
+          alt="Self-Image Curator"
+          width={100}
+          height={34}
+          style={{ objectFit: "contain", height: "28px", width: "auto", opacity: 0.6 }}
+        />
+        <p className="text-xs" style={{ color: "var(--ink-muted)" }}>
           © {new Date().getFullYear()} Thays Vick. All rights reserved.
         </p>
         <a href="https://selfimagecurator.com" className="text-xs" style={{ color: "var(--ink-soft)" }}>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const STEPS = [
@@ -23,12 +24,14 @@ export default function CourseLayout({ children }: { children: React.ReactNode }
         className="h-14 flex items-center justify-between px-6 md:px-10 shrink-0"
         style={{ background: "var(--parchment)", borderBottom: "1px solid var(--ink-ghost)" }}
       >
-        <Link
-          href="/"
-          className="text-xs font-bold uppercase tracking-[0.25em]"
-          style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
-        >
-          Self-Image Curator
+        <Link href="/">
+          <Image
+            src="/Self-Image Curator - Thays Logo.png"
+            alt="Self-Image Curator"
+            width={110}
+            height={36}
+            style={{ objectFit: "contain", height: "30px", width: "auto" }}
+          />
         </Link>
         <div className="hidden md:flex items-center gap-1">
           {STEPS.map((step, i) => {
@@ -41,7 +44,7 @@ export default function CourseLayout({ children }: { children: React.ReactNode }
                 className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest transition-colors rounded-sm"
                 style={{
                   background: isActive ? "var(--plum)" : "transparent",
-                  color: isActive ? "var(--cream)" : isDone ? "var(--ink)" : "var(--ink-ghost)",
+                  color: isActive ? "var(--cream)" : isDone ? "var(--ink)" : "var(--ink-muted)",
                 }}
               >
                 <span>{step.number}</span>

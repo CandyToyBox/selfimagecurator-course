@@ -174,7 +174,7 @@ export default function CuratePage() {
       {finalMsg && (
         <div style={{ background: "#342C36", color: "#EEEFED", padding: "10px 20px", fontSize: 12, whiteSpace: "pre-line" }}>
           {finalMsg}
-          <button onClick={() => setFinalMsg("")} style={{ marginLeft: 16, color: "#8B5E6E", background: "none", border: "none", cursor: "pointer", fontFamily: "Rajdhani", fontWeight: 700 }}>
+          <button onClick={() => setFinalMsg("")} style={{ marginLeft: 16, color: "#E3B9C6", background: "none", border: "none", cursor: "pointer", fontFamily: "Rajdhani", fontWeight: 700, textDecoration: "underline" }}>
             Dismiss
           </button>
         </div>

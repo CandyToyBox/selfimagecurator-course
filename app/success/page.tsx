@@ -34,7 +34,7 @@ export default function SuccessPage() {
         Begin the Workshop
         <ArrowRight size={16} />
       </Link>
-      <p className="text-xs mt-8" style={{ color: "var(--ink-ghost)" }}>
+      <p className="text-xs mt-8" style={{ color: "var(--ink-muted)" }}>
         A receipt has been sent to your email.
       </p>
     </main>

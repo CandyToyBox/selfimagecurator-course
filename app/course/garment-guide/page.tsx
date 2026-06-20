@@ -43,13 +43,26 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
         </div>
         <span
           className="text-xs shrink-0 mt-1"
-          style={{ color: "var(--ink-ghost)" }}
+          style={{ color: "var(--ink-muted)" }}
         >
           {open ? "−" : "+"}
         </span>
       </button>
       {open && (
         <div className="px-6 pb-6">
+          {/* Finished illustrated page for this lesson */}
+          <div
+            className="mt-2 mb-5 overflow-hidden"
+            style={{ border: "1px solid var(--ink-ghost)" }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/images/garment-guide/${lesson.id}.jpg`}
+              alt={`${lesson.subtitle} — ${lesson.title}`}
+              className="w-full block"
+              loading="lazy"
+            />
+          </div>
           <ul className="space-y-3 mt-2">
             {lesson.points.map((point, i) => (
               <li key={i} className="flex items-start gap-3">
