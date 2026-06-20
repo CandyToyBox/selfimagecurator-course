@@ -5,9 +5,55 @@ import Image from "next/image";
 import { useState } from "react";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { BodyStructureIllustration } from "@/components/BodyStructureIllustration";
+import { BookingEmbed } from "@/components/BookingEmbed";
 import type { BodyStructure } from "@/lib/curriculum";
 
 const PRICE = 197;
+
+// Real credentials — sourced from Thays Vick's executive profile.
+const STATS = [
+  { figure: "15+", label: "Years serving high-net-worth clients" },
+  { figure: "$150K+", label: "Luxury purchases facilitated in 30 days" },
+  { figure: "$50–60K", label: "Average seasonal client investment" },
+  { figure: "100%", label: "Referral-driven · near-zero return rate" },
+];
+
+// Heritage houses Thays sources, styles, and tailors for private clients.
+const HERITAGE_BRANDS = [
+  "Brunello Cucinelli",
+  "Loro Piana",
+  "Chanel",
+  "Hermès",
+  "Alexander McQueen",
+  "Ralph Lauren",
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "I met Thays during a time of transition in my life. She analyzed my goals, dreams, and personality to guide me to a capsule wardrobe I could mix and match for any schedule — the colors all blending for an elevated look. Even the dreaded shopping is now a pleasure, since I know exactly what works for my athletic (and breast-cancer) body. Working with Thays has been life-changing — yet the real gift is the friendship and support she has given me.",
+    name: "Carswell Jackson",
+    since: "Client since 2018",
+  },
+  {
+    quote:
+      "Working with you has literally changed my life! For the first time, I feel confident in my clothes and in my style. From clearing out my closet so I keep only the pieces that work together and are my colors, to shopping for timeless pieces that pair with everything I own — you've made getting dressed fun and so much easier every single day. My style finally complements my body, and I simply feel better in my clothes.",
+    name: "Gail Bernstein",
+    since: "Client since 2022",
+  },
+  {
+    quote:
+      "Thays helped me find my confidence again after becoming a mom and balancing a demanding career. Getting dressed used to feel surprisingly stressful. Now I feel confident, prepared for any occasion, and I never have to overthink what to wear. I've saved so much time and money learning what truly works for my body and my colors — and Thays has a way of making you feel amazing about yourself.",
+    name: "Morgan Qubein",
+    since: "Client since 2022",
+  },
+  {
+    quote:
+      "Thays has made getting dressed a breeze. After determining my color palette, her help revamping my wardrobe — and keeping me current with new purchases — has made my life so much easier. She is also a wonderful person and a joy to work with.",
+    name: "Louise Brady",
+    since: "Client since 2018",
+  },
+];
 
 const WHAT_YOU_GET = [
   {
@@ -114,6 +160,13 @@ export default function LandingPage() {
           >
             Preview Course
           </Link>
+          <a
+            href="#book"
+            className="text-xs font-medium uppercase tracking-widest transition-opacity hover:opacity-60 hidden sm:block"
+            style={{ color: "var(--ink-soft)", letterSpacing: "0.15em" }}
+          >
+            Book 1-on-1
+          </a>
           <Link
             href="/checkout"
             className="text-xs font-semibold uppercase tracking-widest px-5 py-2.5 transition-opacity hover:opacity-70"
@@ -348,24 +401,34 @@ export default function LandingPage() {
               Your guide
             </p>
             <h2
-              className="text-3xl md:text-4xl font-bold mb-6"
+              className="text-3xl md:text-4xl font-bold mb-2"
               style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
             >
               Thays Vick
             </h2>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--ink-soft)" }}>
-              Thays is a self-image consultant and educator who has spent years developing a precise,
-              structured approach to personal style — one that goes far beyond trends or body type
-              categories.
+            <p
+              className="text-xs uppercase tracking-[0.2em] mb-6"
+              style={{ color: "var(--accent)" }}
+            >
+              Luxury Personal Shopper · Wardrobe Curator · Image Consultant
             </p>
             <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--ink-soft)" }}>
-              Her one-on-one consultations are in high demand. This workshop is the closest thing to
-              that experience in a self-guided format — built from the same methodology she uses with
-              every client.
+              For more than <strong style={{ color: "var(--ink)" }}>15 years</strong>, Thays has helped
+              high-net-worth clients across Bal Harbour, Palm Beach, and New York look — and feel —
+              unmistakably themselves. As founder of Self-Image Curator, she provides concierge-level
+              personal shopping, wardrobe curation, and color analysis for a private clientele of
+              executives, physicians, entrepreneurs, and professional athletes.
+            </p>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--ink-soft)" }}>
+              Brazilian-born and atelier-trained — with study at the{" "}
+              <strong style={{ color: "var(--ink)" }}>Fashion Institute of Technology (FIT)</strong> —
+              she designs, tailors, and alters as fluently as she sources. Every piece fits flawlessly:
+              the foundation of a 100% referral-driven practice with a near-zero return rate.
             </p>
             <p className="text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
-              The Online Blueprint Workshop is her way of making that system accessible to anyone ready
-              to do the work.
+              Her one-on-one consultations are in high demand. The Online Blueprint Workshop distills the
+              same proprietary methodology — body architecture, color psychology, and lifestyle — into a
+              self-guided experience anyone can follow.
             </p>
           </div>
           <div className="aspect-[3/4] overflow-hidden" style={{ background: "var(--ink-ghost)" }}>
@@ -376,6 +439,146 @@ export default function LandingPage() {
               height={800}
               style={{ objectFit: "cover", width: "100%", height: "100%" }}
             />
+          </div>
+        </div>
+
+        {/* Private-client impact — stats */}
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 gap-px mt-16"
+          style={{ background: "var(--ink-ghost)", border: "1px solid var(--ink-ghost)" }}
+        >
+          {STATS.map((s) => (
+            <div key={s.label} className="px-5 py-7 text-center" style={{ background: "var(--cream)" }}>
+              <p
+                className="text-3xl md:text-4xl font-bold mb-2"
+                style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--plum)" }}
+              >
+                {s.figure}
+              </p>
+              <p
+                className="text-[11px] uppercase tracking-wider leading-snug"
+                style={{ color: "var(--ink-soft)" }}
+              >
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Signature quote */}
+        <blockquote
+          className="mt-12 text-center text-lg md:text-xl leading-relaxed italic max-w-2xl mx-auto"
+          style={{ fontFamily: "Newsreader, Georgia, serif", color: "var(--ink)" }}
+        >
+          “Great style isn&apos;t about more — it&apos;s about the right architecture. Built around who a
+          woman truly is, the perfect wardrobe makes confidence effortless.”
+          <span
+            className="block text-xs uppercase tracking-[0.25em] not-italic mt-5"
+            style={{ color: "var(--ink-soft)", fontFamily: "Inter, sans-serif" }}
+          >
+            Thays Vick
+          </span>
+        </blockquote>
+      </section>
+
+      {/* Heritage brand expertise + experience */}
+      <section className="py-16 px-6 md:px-12" style={{ background: "var(--ink-deep)" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <p
+            className="text-xs uppercase tracking-[0.3em] mb-8"
+            style={{ color: "rgba(238,239,237,0.55)" }}
+          >
+            Heritage houses she sources &amp; styles
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5 mb-12">
+            {HERITAGE_BRANDS.map((brand) => (
+              <span
+                key={brand}
+                className="text-base md:text-lg tracking-wide"
+                style={{ fontFamily: "Newsreader, Georgia, serif", color: "var(--cream)" }}
+              >
+                {brand}
+              </span>
+            ))}
+          </div>
+          <div
+            className="grid md:grid-cols-3 gap-8 pt-10 text-left"
+            style={{ borderTop: "1px solid rgba(238,239,237,0.15)" }}
+          >
+            {[
+              {
+                h: "Luxury Retail",
+                b: "Private clienteling at Alexander McQueen, Saks Fifth Avenue, and Hugo Boss — in New York and Europe.",
+              },
+              {
+                h: "Editorial & Runway",
+                b: "Styling with Oscar de la Renta, Marchesa, Jenny Packham, and Calvin Klein Resort.",
+              },
+              {
+                h: "Atelier-Trained",
+                b: "A family couture house in Brazil, plus Centro Europeu and the Image Resource Center, New York.",
+              },
+            ].map((c) => (
+              <div key={c.h}>
+                <p
+                  className="text-sm font-bold mb-2"
+                  style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--cream)" }}
+                >
+                  {c.h}
+                </p>
+                <p className="text-xs leading-relaxed" style={{ color: "rgba(238,239,237,0.7)" }}>
+                  {c.b}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 px-6 md:px-12" style={{ background: "var(--parchment)" }}>
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs uppercase tracking-[0.3em] mb-3" style={{ color: "var(--ink-soft)" }}>
+            In her clients&apos; words
+          </p>
+          <p
+            className="text-2xl md:text-3xl font-bold mb-12 max-w-xl"
+            style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
+          >
+            A relationship-driven practice — built on trust, discretion, and lasting friendship.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {TESTIMONIALS.map((t) => (
+              <figure
+                key={t.name}
+                className="p-7 flex flex-col"
+                style={{ background: "var(--cream)", border: "1px solid var(--ink-ghost)" }}
+              >
+                <span
+                  className="text-3xl leading-none mb-3"
+                  style={{ fontFamily: "Newsreader, Georgia, serif", color: "var(--accent)" }}
+                >
+                  &ldquo;
+                </span>
+                <blockquote
+                  className="text-sm leading-relaxed mb-5 flex-1"
+                  style={{ color: "var(--ink-soft)" }}
+                >
+                  {t.quote}
+                </blockquote>
+                <figcaption>
+                  <p
+                    className="text-sm font-bold uppercase tracking-wider"
+                    style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
+                  >
+                    {t.name}
+                  </p>
+                  <p className="text-xs italic" style={{ color: "var(--accent)" }}>
+                    {t.since}
+                  </p>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
@@ -416,6 +619,28 @@ export default function LandingPage() {
             hello@selfimagecurator.com
           </a>
         </p>
+      </section>
+
+      {/* Book a 1-on-1 — inline scheduler */}
+      <section id="book" className="py-24 px-6 md:px-12">
+        <div className="max-w-3xl mx-auto text-center mb-10">
+          <p className="text-xs uppercase tracking-[0.3em] mb-4" style={{ color: "var(--ink-soft)" }}>
+            Prefer to work privately
+          </p>
+          <h2
+            className="text-3xl md:text-4xl font-bold mb-4"
+            style={{ fontFamily: "Rajdhani, sans-serif", color: "var(--ink)" }}
+          >
+            Book a 1-on-1 with Thays.
+          </h2>
+          <p className="text-sm leading-relaxed max-w-xl mx-auto" style={{ color: "var(--ink-soft)" }}>
+            For the full concierge experience — a personal Blueprint Analysis, closet edit, and direct
+            guidance built around your body, your lifestyle, and your goals. Choose a time below.
+          </p>
+        </div>
+        <div className="max-w-3xl mx-auto" style={{ border: "1px solid var(--ink-ghost)" }}>
+          <BookingEmbed />
+        </div>
       </section>
 
       {/* FAQ */}
